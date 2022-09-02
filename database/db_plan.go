@@ -1,6 +1,10 @@
 package database
 
-import "github.com/adityasunny1189/FitnFine/models"
+import (
+	"log"
+
+	"github.com/adityasunny1189/FitnFine/models"
+)
 
 func GetPlan(userId, goalId int) (models.Plan, error) {
 	var plan models.Plan
@@ -10,6 +14,7 @@ func GetPlan(userId, goalId int) (models.Plan, error) {
 
 func AddPlan(plan models.Plan) (int, error) {
 	err := DB.Create(&plan).Error
+	log.Println("plan: ", plan)
 	return int(plan.ID), err
 }
 

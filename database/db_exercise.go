@@ -1,6 +1,10 @@
 package database
 
-import "github.com/adityasunny1189/FitnFine/models"
+import (
+	"log"
+
+	"github.com/adityasunny1189/FitnFine/models"
+)
 
 func AddExercise(exercise models.Exercise) error {
 	err := DB.Create(&exercise).Error
@@ -9,6 +13,7 @@ func AddExercise(exercise models.Exercise) error {
 
 func AddAllExercise(exercises []models.Exercise) error {
 	err := DB.Create(&exercises).Error
+	log.Println("error: ", err)
 	return err
 }
 
