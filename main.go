@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	CONNECTION_STRING = "root:Adisunny123@tcp(127.0.0.1:3306)/fitnfine?charset=utf8mb4&parseTime=True&loc=Local"
+	CONNECTION_STRING = "root:root@1234@tcp(127.0.0.1:3306)/fitnfine?charset=utf8mb4&parseTime=True&loc=Local"
 )
 
 func init() {
