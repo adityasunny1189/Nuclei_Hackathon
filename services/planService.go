@@ -16,9 +16,9 @@ func GetPlanService(userId, goalId int) (models.Plan, error) {
 	return plan, nil
 }
 
-func AddPlanService(plan models.Plan) error {
-	err := database.AddPlan(plan)
-	return err
+func AddPlanService(plan models.Plan) (int, error) {
+	planId, err := database.AddPlan(plan)
+	return planId, err
 }
 
 func GetPlanDetailService(planId int) (models.PlanDetail, error) {

@@ -8,8 +8,9 @@ func GetPlan(userId, goalId int) (models.Plan, error) {
 	return plan, err
 }
 
-func AddPlan(plan models.Plan) error {
-	return DB.Create(&plan).Error
+func AddPlan(plan models.Plan) (int, error) {
+	err := DB.Create(&plan).Error
+	return int(plan.ID), err
 }
 
 func GetPlanDetail(planId int) (models.PlanDetail, error) {
