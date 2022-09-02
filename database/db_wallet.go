@@ -1,49 +1,80 @@
 package database
 
-import "github.com/adityasunny1189/FitnFine/models"
+import (
+	"errors"
 
-func CreateWallet(userId int) {
+	"github.com/adityasunny1189/FitnFine/models"
+)
+
+func CreateWallet(userId int) error {
 	wallet := models.Wallet{
 		UserId:  userId,
 		Balance: 100,
 	}
-	DB.Create(&wallet)
+	if err := DB.Create(&wallet).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
-func findWallet(userId int) *models.Wallet {
+func findWallet(userId int) (*models.Wallet, error) {
 	var wallet models.Wallet
-	DB.Find(&wallet, "user_id = ?", userId)
-	return &wallet
+	if err := DB.Find(&wallet, "user_id = ?", userId).Error; err != nil {
+		return &models.Wallet{}, err
+	}
+	return &wallet, nil
 }
 
-func updateWallet(userId int, balance float64) {
-	DB.Model(&models.Wallet{}).Where("user_id = ?", userId).Update("balance", balance)
+func updateWallet(userId int, balance float64) error {
+	err := DB.Model(&models.Wallet{}).Where("user_id = ?", userId).Update("balance", balance).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func TopupWallet(userId int, amount float64) {
-	wallet := findWallet(userId)
+func TopupWallet(userId int, amount float64) error {
+	wallet, err := findWallet(userId)
+	if err != nil {
+		return errors.New("find waller error ")
+	}
 	newBalance := wallet.Balance + amount
 	updateWallet(userId, newBalance)
+	return nil
 }
 
-func CreditWallet(userId int, reward float64) {
-	wallet := findWallet(userId)
+func CreditWallet(userId int, reward float64) error {
+	wallet, err := findWallet(userId)
+	if err != nil {
+		return errors.New("find waller error ")
+	}
 	newBalance := wallet.Balance + reward
 	updateWallet(userId, newBalance)
+	return nil
 }
 
-func DebitWallet(userId int, penalty float64) {
-	wallet := findWallet(userId)
+func DebitWallet(userId int, penalty float64) error {
+	wallet, err := findWallet(userId)
+	if err != nil {
+		return errors.New("find waller error ")
+	}
 	newBalance := wallet.Balance - penalty
 	updateWallet(userId, newBalance)
+	return nil
 }
 
-func CheckWalletBalance(userId int, totalPenalty float64) bool {
-	wallet := findWallet(userId)
-	return wallet.Balance > totalPenalty
+func CheckWalletBalance(userId int, totalPenalty float64) (bool, error) {
+	wallet, err := findWallet(userId)
+	if err != nil {
+		return false, errors.New("find wallet error ")
+	}
+	return wallet.Balance > totalPenalty, err
 }
 
-func GetWalletBalance(userId int) float64 {
-	wallet := findWallet(userId)
-	return wallet.Balance
+func GetWalletBalance(userId int) (float64, error) {
+	wallet, err := findWallet(userId)
+	if err != nil {
+		return 0, errors.New("find wallet error ")
+	}
+	return wallet.Balance, nil
 }

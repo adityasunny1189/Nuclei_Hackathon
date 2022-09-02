@@ -25,7 +25,6 @@ func GetUser(email string, password string) (models.User, error) {
 func AddUser(user models.User) error {
 	// First check ki user is present or not using username and email
 	var existingUser models.User
-	log.Println("db - level - ", user)
 	err := DB.Find(&existingUser, "email = ? or user_name = ?", user.Email, user.UserName).Error
 	if err != nil {
 		return errors.New("error getting user")
@@ -39,5 +38,10 @@ func AddUser(user models.User) error {
 	if err = DB.Create(&user).Error; err != nil {
 		return errors.New("cannot create user")
 	}
+	err = CreateWallet(int(user.ID))
+	if err != nil {
+		return errors.New("cannot create wallet")
+	}
+	log.Println("user created wallet created")
 	return nil
 }
