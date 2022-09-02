@@ -9,7 +9,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type planRequest struct {
+type getRequest struct {
+	goalId int
+	userId int
+}
+
+type exercise struct {
+	name  string
+	count int
+}
+
+type planReqResBody struct {
 	name         string
 	goalId       int
 	userId       int
@@ -17,33 +27,41 @@ type planRequest struct {
 	penalty      float64
 	exercises    []exercise
 }
-type exercise struct {
-	name  string
-	count string
-}
 
 func GetPlanController(ctx *gin.Context) {
-	var req planRequest
+	var req getRequest
 	if err := ctx.BindJSON(&req); err != nil {
-		ctx.IndentedJSON(http.StatusBadRequest, req)
+		ctx.IndentedJSON(http.StatusBadRequest, planReqResBody{})
 	}
-	if len(req.name) == 0 || req.planDuration <= 0 || req.penalty <= 0 {
-		ctx.IndentedJSON(http.StatusBadRequest, req)
-	}
-	if len(req.exercises) == 0 {
-		log.Print("error no exercise")
-		ctx.IndentedJSON(http.StatusBadRequest, req)
-	}
+	// In future will have to validate the req body (userid and goalid)
 	plan, err := services.GetPlanService(req.userId, req.goalId)
 	if err != nil {
 		log.Printf("error in logging in %v", err)
-		ctx.IndentedJSON(http.StatusBadRequest, plan)
 	}
-	ctx.IndentedJSON(http.StatusFound, plan)
+	exercises, err := services.GetAllExerciseService(int(plan.ID))
+	if err != nil {
+		log.Printf("error in logging in %v", err)
+	}
+	var resExercises []exercise
+	for _, val := range exercises {
+		resExercises = append(resExercises, exercise{
+			name:  val.Name,
+			count: val.Count,
+		}) 
+	}
+	res := planReqResBody{
+		name:         plan.Name,
+		goalId:       plan.GoalId,
+		userId:       plan.UserId,
+		planDuration: plan.PlanDuration,
+		penalty:      plan.Penalty,
+		exercises:    resExercises,
+	}
+	ctx.IndentedJSON(http.StatusFound, res)
 }
 
 func AddPlanController(ctx *gin.Context) {
-	var req planRequest
+	var req planReqResBody
 	if err := ctx.BindJSON(&req); err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, req)
 	}
@@ -73,10 +91,10 @@ func AddPlanController(ctx *gin.Context) {
 		PauseDuration: 3,
 	}
 	exercises := []models.Exercise{}
-	for _, val := range exercises {
+	for _, val := range req.exercises {
 		exercises = append(exercises, models.Exercise{
-			Name:  val.Name,
-			Count: val.Count,
+			Name:  val.name,
+			Count: val.count,
 		})
 	}
 	err = services.AddPlanDetailService(planDetails)
@@ -89,12 +107,4 @@ func AddPlanController(ctx *gin.Context) {
 		log.Print("error cannot save exercise")
 		ctx.IndentedJSON(http.StatusBadRequest, req)
 	}
-}
-
-func GetPlanDetailController(ctx *gin.Context) {
-
-}
-
-func AddPlanDetailController(ctx *gin.Context) {
-
 }

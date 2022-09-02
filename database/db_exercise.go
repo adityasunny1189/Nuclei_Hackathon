@@ -12,10 +12,10 @@ func AddAllExercise(exercises []models.Exercise) error {
 	return err
 }
 
-func GetAllExercise(planId int) []models.Exercise {
+func GetAllExercise(planId int) ([]models.Exercise, error) {
 	var exercises []models.Exercise
-	DB.Find(&exercises, "plan_id = ?", planId)
-	return exercises
+	err := DB.Find(&exercises, "plan_id = ?", planId).Error
+	return exercises, err
 }
 
 func UpdateExercise(exercise models.Exercise) (models.Exercise, error) {
