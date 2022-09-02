@@ -49,3 +49,11 @@ func AddUserController(ctx *gin.Context) {
 	}
 	ctx.IndentedJSON(http.StatusCreated, user)
 }
+
+func GetUserDetailController(ctx *gin.Context) {
+
+}
+
+func AddUserDetailController(ctx *gin.Context) {
+
+}
