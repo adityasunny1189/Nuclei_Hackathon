@@ -6,8 +6,8 @@ type User struct {
 	gorm.Model
 	Id       int    `json:"id"`
 	Name     string `json:"name"`
-	UserName string `json:"username"`
-	Email    string `json:"email"`
+	UserName string `json:"username" gorm:"unique"`
+	Email    string `json:"email" gorm:"unique"`
 	Password string `json:"password"`
 }
 
