@@ -39,3 +39,12 @@ func AddPlanDetailService(planDetail models.PlanDetail) error {
 func AddAllExerciseService(exercises []models.Exercise) error {
 	return database.AddAllExercise(exercises)
 }
+
+func UpdatePlanDetailTrajectoryAndDaysCompletedService(planId int, update string, done bool) (models.PlanDetail, error) {
+	planDetail, err := database.UpdatePlanDetailTrajectoryAndDaysCompleted(planId, update, done)
+	if err != nil {
+		log.Println(err)
+		return models.PlanDetail{}, err
+	}
+	return planDetail, nil
+}
