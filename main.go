@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	CONNECTION_STRING = "root:password@tcp(127.0.0.1:3306)/db_name?charset=utf8mb4&parseTime=True&loc=Local"
+	CONNECTION_STRING = "root:Adisunny123@tcp(127.0.0.1:3306)/fitnfine?charset=utf8mb4&parseTime=True&loc=Local"
 )
 
 func init() {
@@ -30,7 +30,7 @@ func initRouter() *gin.Engine {
 	api := router.Group("/api/v1")
 	{
 		api.GET("/ping", controllers.PongController)
-		api.GET("/login", controllers.GetUserController)
+		api.POST("/login", controllers.GetUserController)
 		api.POST("/signup", controllers.AddUserController)
 	}
 
