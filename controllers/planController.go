@@ -34,12 +34,12 @@ func GetPlanController(ctx *gin.Context) {
 		log.Print("error no exercise")
 		ctx.IndentedJSON(http.StatusBadRequest, req)
 	}
-	user, err := services.GetPlanService(req.userId, req.goalId)
+	plan, err := services.GetPlanService(req.userId, req.goalId)
 	if err != nil {
 		log.Printf("error in logging in %v", err)
-		ctx.IndentedJSON(http.StatusBadRequest, user)
+		ctx.IndentedJSON(http.StatusBadRequest, plan)
 	}
-	ctx.IndentedJSON(http.StatusFound, user)
+	ctx.IndentedJSON(http.StatusFound, plan)
 }
 
 func AddPlanController(ctx *gin.Context) {
@@ -69,7 +69,8 @@ func AddPlanController(ctx *gin.Context) {
 	}
 
 	planDetails := models.PlanDetail{
-		PlanId: planId,
+		PlanId:        planId,
+		PauseDuration: 3,
 	}
 	exercises := []models.Exercise{}
 	for _, val := range exercises {
