@@ -31,6 +31,11 @@ func GetPlanDetailService(planId int) (models.PlanDetail, error) {
 }
 
 func AddPlanDetailService(planDetail models.PlanDetail) error {
+	// compute pause days based on planduration and then call db
 	err := database.AddPlanDetail(planDetail)
 	return err
+}
+
+func AddAllExerciseService(exercises []models.Exercise) error {
+	return database.AddAllExercise(exercises)
 }
