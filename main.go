@@ -30,6 +30,8 @@ func initRouter() *gin.Engine {
 	api := router.Group("/api/v1")
 	{
 		api.GET("/ping", controllers.PongController)
+		api.GET("/login", controllers.GetUserController)
+		api.POST("/signup", controllers.AddUserController)
 	}
 
 	return router
