@@ -4,7 +4,6 @@ import "gorm.io/gorm"
 
 type Plan struct {
 	gorm.Model
-	Id           int     `json:"id"`
 	GoalId       int     `json:"goal_id"`
 	UserId       int     `json:"user_id"`
 	Name         string  `json:"name"`
@@ -14,7 +13,6 @@ type Plan struct {
 
 type PlanDetail struct {
 	gorm.Model
-	Id            int     `json:"id"`
 	PlanId        int     `json:"plan_id"`
 	DaysCompleted int     `json:"days_completed"`
 	Trajectory    string  `json:"trajectory"`
