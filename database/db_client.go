@@ -21,5 +21,11 @@ func Connect(connectionString string) {
 
 func Migrate() {
 	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&models.UserDetail{})
+	DB.AutoMigrate(&models.Plan{})
+	DB.AutoMigrate(&models.PlanDetail{})
+	DB.AutoMigrate(&models.Exercise{})
+	DB.AutoMigrate(&models.Goal{})
+	DB.AutoMigrate(&models.Wallet{})
 	log.Println("database migration completed")
 }
