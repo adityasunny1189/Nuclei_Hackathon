@@ -32,6 +32,8 @@ func initRouter() *gin.Engine {
 		api.GET("/ping", controllers.PongController)
 		api.POST("/login", controllers.GetUserController)
 		api.POST("/signup", controllers.AddUserController)
+		api.POST("/createGoals", controllers.AddGoalsController)
+		api.GET("/getGoals", controllers.GetGoalsController)
 	}
 
 	return router
