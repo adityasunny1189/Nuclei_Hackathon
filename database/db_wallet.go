@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"log"
 
 	"github.com/adityasunny1189/FitnFine/models"
 )
@@ -71,10 +72,10 @@ func CheckWalletBalance(userId int, totalPenalty float64) (bool, error) {
 	return wallet.Balance > totalPenalty, err
 }
 
-func GetWalletBalance(userId int) (float64, error) {
+func GetWalletBalance(userId int) models.Wallet {
 	wallet, err := findWallet(userId)
 	if err != nil {
-		return 0, errors.New("find wallet error ")
+		log.Println(err)
 	}
-	return wallet.Balance, nil
+	return *wallet
 }

@@ -5,7 +5,6 @@ import (
 
 	"github.com/adityasunny1189/FitnFine/controllers"
 	"github.com/adityasunny1189/FitnFine/database"
-	"github.com/adityasunny1189/FitnFine/services"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +15,7 @@ const (
 func init() {
 	database.Connect(CONNECTION_STRING)
 	database.Migrate()
-	services.AddGoalService()
+	// services.AddGoalService()
 }
 
 func main() {
@@ -43,6 +42,7 @@ func initRouter() *gin.Engine {
 
 		api.POST("/reward", controllers.AddRewardController)
 		api.POST("/penalty", controllers.AddPenaltyController)
+		api.POST("/getWallet", controllers.GetWalletController)
 	}
 
 	return router

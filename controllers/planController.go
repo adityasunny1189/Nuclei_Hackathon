@@ -28,6 +28,20 @@ type planReqResBody struct {
 	Exercises    []exercise `json:"exercises" binding:"required"`
 }
 
+type planGetReq struct {
+	Name          string     `json:"name"`
+	GoalId        int        `json:"goalId"`
+	UserId        int        `json:"userId"`
+	PlanDuration  int        `json:"planDuration"`
+	Penalty       float64    `json:"penalty"`
+	Trajectory    string     `json:"trajectory"`
+	PauseDuration int        `json:"pauseDuration"`
+	Status        int        `json:"status"`
+	DaysCompleted int        `json:"daysCompleted"`
+	TotalPenalty  float64    `json:"totalPenalty"`
+	Exercises     []exercise `json:"exercises" binding:"required"`
+}
+
 func GetPlanController(ctx *gin.Context) {
 	var req getRequest
 	if err := ctx.BindJSON(&req); err != nil {
@@ -38,6 +52,10 @@ func GetPlanController(ctx *gin.Context) {
 	plan, err := services.GetPlanService(req.UserId, req.GoalId)
 	if err != nil {
 		log.Printf("error in logging in %v", err)
+	}
+	planDetail, err := services.GetPlanDetailService(int(plan.ID))
+	if err != nil {
+		log.Println(err)
 	}
 	exercises, err := services.GetAllExerciseService(int(plan.ID))
 	if err != nil {
@@ -50,13 +68,18 @@ func GetPlanController(ctx *gin.Context) {
 			Count: val.Count,
 		})
 	}
-	res := planReqResBody{
-		Name:         plan.Name,
-		GoalId:       plan.GoalId,
-		UserId:       plan.UserId,
-		PlanDuration: plan.PlanDuration,
-		Penalty:      plan.Penalty,
-		Exercises:    resExercises,
+	res := planGetReq{
+		Name:          plan.Name,
+		GoalId:        plan.GoalId,
+		UserId:        plan.UserId,
+		PlanDuration:  plan.PlanDuration,
+		Penalty:       plan.Penalty,
+		Trajectory:    planDetail.Trajectory,
+		DaysCompleted: planDetail.DaysCompleted,
+		PauseDuration: planDetail.PauseDuration,
+		Status:        planDetail.Status,
+		TotalPenalty:  planDetail.TotalPenalty,
+		Exercises:     resExercises,
 	}
 	ctx.IndentedJSON(http.StatusFound, res)
 }
@@ -100,6 +123,7 @@ func AddPlanController(ctx *gin.Context) {
 	planDetails := models.PlanDetail{
 		PlanId:        planId,
 		PauseDuration: 3,
+		Status: 1,
 	}
 	exercises := []models.Exercise{}
 	for _, val := range req.Exercises {

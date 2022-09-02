@@ -27,3 +27,18 @@ func GetPlanDetail(planId int) (models.PlanDetail, error) {
 func AddPlanDetail(planDetail models.PlanDetail) error {
 	return DB.Create(&planDetail).Error
 }
+
+// for trajectory, daysCompleted, status, pauseduration, totalpenalty
+func UpdatePlanDetailTrajectoryAndDaysCompleted(planId int, update string, done bool) (models.PlanDetail, error) {
+	var planDetail models.PlanDetail
+	err := DB.Find(&planDetail, "plan_id = ?", planId).Error
+	if err != nil {
+		log.Println(err)
+	}
+	planDetail.Trajectory += update
+	if done {
+		planDetail.DaysCompleted += 1
+	}
+	err = DB.Save(&planDetail).Error
+	return planDetail, err
+}
