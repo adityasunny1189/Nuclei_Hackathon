@@ -82,6 +82,14 @@ func AddPlanController(ctx *gin.Context) {
 		Penalty:      req.Penalty,
 	}
 
+	// check if plan is already present then return error
+	pPlan, _ := services.GetPlanService(plan.UserId, plan.GoalId)
+	if pPlan.ID != 0 {
+		log.Println("duplicate plan")
+		ctx.IndentedJSON(http.StatusBadRequest, planReqResBody{})
+		return
+	}
+
 	planId, err := services.AddPlanService(plan)
 	log.Println("plan id: ", planId)
 	if err != nil {
