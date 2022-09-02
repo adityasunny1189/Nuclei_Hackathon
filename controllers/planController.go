@@ -10,8 +10,8 @@ import (
 )
 
 type getRequest struct {
-	GoalId int
-	UserId int
+	GoalId int `json:"goalId"`
+	UserId int `json:"userId"`
 }
 
 type exercise struct {
@@ -97,8 +97,8 @@ func AddPlanController(ctx *gin.Context) {
 	for _, val := range req.Exercises {
 		exercises = append(exercises, models.Exercise{
 			PlanId: planId,
-			Name:  val.Name,
-			Count: val.Count,
+			Name:   val.Name,
+			Count:  val.Count,
 		})
 	}
 	err = services.AddPlanDetailService(planDetails)

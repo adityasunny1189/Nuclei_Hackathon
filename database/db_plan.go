@@ -8,7 +8,7 @@ import (
 
 func GetPlan(userId, goalId int) (models.Plan, error) {
 	var plan models.Plan
-	err := DB.Find(&plan, "user_id = ? AND goal_id = ?", userId, goalId).Error
+	err := DB.Where("user_id = ? AND goal_id = ?", userId, goalId).Find(&plan).Error
 	return plan, err
 }
 
