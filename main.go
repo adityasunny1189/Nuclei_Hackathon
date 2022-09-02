@@ -43,6 +43,7 @@ func initRouter() *gin.Engine {
 		api.POST("/reward", controllers.AddRewardController)
 		api.POST("/penalty", controllers.AddPenaltyController)
 		api.POST("/getWallet", controllers.GetWalletController)
+		api.POST("/topupWallet", controllers.TopupWalletController)
 	}
 
 	return router

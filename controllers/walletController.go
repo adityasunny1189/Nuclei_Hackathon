@@ -26,7 +26,6 @@ func AddRewardController(ctx *gin.Context) {
 		log.Println(err)
 	}
 	ctx.IndentedJSON(http.StatusAccepted, req)
-	 
 }
 
 func AddPenaltyController(ctx *gin.Context) {
@@ -48,4 +47,15 @@ func GetWalletController(ctx *gin.Context) {
 	}
 	wallet := services.GetWalletBalanceService(req.UserId)
 	ctx.IndentedJSON(http.StatusFound, wallet)
+}
+
+func TopupWalletController(ctx *gin.Context) {
+	var req reqRP
+	if err := ctx.BindJSON(&req); err != nil {
+		log.Println(err)
+	}
+	if err := services.TopupWalletService(req.UserId, req.Amount); err != nil {
+		log.Println(err)
+	}
+	ctx.IndentedJSON(http.StatusAccepted, req)
 }
