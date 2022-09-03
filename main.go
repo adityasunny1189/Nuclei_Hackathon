@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	CONNECTION_STRING = "root:root@1234@tcp(127.0.0.1:3306)/fitnfine?charset=utf8mb4&parseTime=True&loc=Local"
+	CONNECTION_STRING = "root:Adisunny123@tcp(127.0.0.1:3306)/fitnfine?charset=utf8mb4&parseTime=True&loc=Local"
 )
 
 func init() {
@@ -44,6 +44,8 @@ func initRouter() *gin.Engine {
 		api.POST("/penalty", controllers.AddPenaltyController)
 		api.POST("/getWallet", controllers.GetWalletController)
 		api.POST("/topupWallet", controllers.TopupWalletController)
+
+		api.GET("/getGoals", controllers.GetGoalsController)
 	}
 
 	return router
